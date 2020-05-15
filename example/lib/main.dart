@@ -5,12 +5,7 @@ void main() {
   runApp(MaterialApp(home: MyApp()));
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SurfaceDuoLayout(
@@ -25,22 +20,18 @@ class _MyAppState extends State<MyApp> {
         title: Text('Main Page'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            RaisedButton(
-              child: Text('Example!'),
-              onPressed: () {},
-            ),
-            RaisedButton(
-              child: Text('Example!'),
-              onPressed: () {},
-            ),
-            RaisedButton(
-              child: Text('Example!'),
-              onPressed: () {},
-            ),
-          ],
+        child: SurfaceDuoInfo(
+          builder: (isDualScreenDevice, isSpanned, hingeAngle) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text('This page always displays!'),
+                Text('isDualScreenDevice: $isDualScreenDevice'),
+                Text('isAppSpanned: $isSpanned'),
+                Text('hingeAngle: $hingeAngle'),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -56,10 +47,7 @@ class _MyAppState extends State<MyApp> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            RaisedButton(
-              child: Text('Example!'),
-              onPressed: () {},
-            ),
+            Text('This page only shows when spanned on 2 screens!'),
           ],
         ),
       ),
