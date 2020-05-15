@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:surface_duo/surface_duo.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -15,24 +15,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-            child: RaisedButton(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Plugin example app'),
+      ),
+      body: Center(
+        child: RaisedButton(
           child: Text('Test'),
           onPressed: () {
             SurfaceDuo().test();
+            var size = MediaQuery.of(context).size;
+            print('Height: ${size.height}');
+            print('Width: ${size.width}');
           },
-        )),
+        ),
       ),
     );
   }
