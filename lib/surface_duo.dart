@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,21 +19,25 @@ class SurfaceDuo {
   static const MethodChannel _channel = const MethodChannel('surface_duo');
 
   Future<bool> getIsDual() async {
+    if (!Platform.isAndroid) return false;
     final isDual = await _channel.invokeMethod<bool>('isDualScreenDevice');
     return isDual;
   }
 
   Future<bool> getIsSpanned() async {
+    if (!Platform.isAndroid) return false;
     final isAppSpanned = await _channel.invokeMethod<bool>('isAppSpanned');
     return isAppSpanned;
   }
 
   Future<double> getHingeAngle() async {
+    if (!Platform.isAndroid) return null;
     final hingeAngle = await _channel.invokeMethod<double>('getHingeAngle');
     return hingeAngle;
   }
 
   Future<NonFunctionalBounds> getNonFunctionalBounds() async {
+    if (!Platform.isAndroid) return null;
     final result =
         await _channel.invokeMethod<String>('getNonFunctionalBounds');
     if (result == null) {
@@ -75,6 +80,9 @@ class NonFunctionalBounds {
 const unspannedSize = Size(540.0, 704);
 const spannedSize = Size(1113.6, 704);
 
+/// Currently supports Two Page layout
+///
+/// https://docs.microsoft.com/en-us/dual-screen/introduction#dual-screen-app-patterns
 class SurfaceDuoLayout extends StatelessWidget {
   final Widget child;
   final Widget secondChild;
