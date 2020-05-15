@@ -6,16 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SurfaceDuo {
-  //todo do we need unspanned?
-  // Unspanned size
-  // Height: 704.0
-  // Width: 540.0
-
-  //todo get at runtime? What benefits?
-  // Spanned size
-  // Height: 704.0
-  // Width: 1113.6
-
   static const MethodChannel _channel = const MethodChannel('surface_duo');
 
   Future<bool> getIsDual() async {
@@ -77,8 +67,12 @@ class NonFunctionalBounds {
       };
 }
 
+//todo do we need unspanned?
 const unspannedSize = Size(540.0, 704);
+
+//todo get at runtime? What benefits?
 const spannedSize = Size(1113.6, 704);
+const centerBarWidth = 33.6;
 
 /// Currently supports Two Page layout
 ///
@@ -107,7 +101,7 @@ class SurfaceDuoLayout extends StatelessWidget {
           size: unspannedSize,
           child: child,
         ),
-        const SizedBox(width: 33.6),
+        const SizedBox(width: centerBarWidth),
         SizedBox.fromSize(
           size: unspannedSize,
           child: secondChild,
