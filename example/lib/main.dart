@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:surface_duo/surface_duo.dart';
 
 void main() {
@@ -16,19 +13,54 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    return SurfaceDuoLayout(
+      child: _buildMainPage(),
+      secondChild: _buildSecondPage(),
+    );
+  }
+
+  Widget _buildMainPage() {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Plugin example app'),
+        title: Text('Main Page'),
       ),
       body: Center(
-        child: RaisedButton(
-          child: Text('Test'),
-          onPressed: () {
-            SurfaceDuo().test();
-            var size = MediaQuery.of(context).size;
-            print('Height: ${size.height}');
-            print('Width: ${size.width}');
-          },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Example!'),
+              onPressed: () {},
+            ),
+            RaisedButton(
+              child: Text('Example!'),
+              onPressed: () {},
+            ),
+            RaisedButton(
+              child: Text('Example!'),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSecondPage() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Second Page'),
+      ),
+      backgroundColor: Colors.tealAccent,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            RaisedButton(
+              child: Text('Example!'),
+              onPressed: () {},
+            ),
+          ],
         ),
       ),
     );
