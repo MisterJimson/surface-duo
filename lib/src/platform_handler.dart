@@ -37,4 +37,14 @@ class SurfaceDuo {
       return NonFunctionalBounds.fromJson(jsonDecode(result));
     }
   }
+
+  static Future<SurfaceDuoInfoModel> getInfoModel() async {
+    if (!Platform.isAndroid) return null;
+    final result = await _channel.invokeMethod<String>('getInfoModel');
+    if (result == null) {
+      return null;
+    } else {
+      return SurfaceDuoInfoModel.fromJson(jsonDecode(result));
+    }
+  }
 }

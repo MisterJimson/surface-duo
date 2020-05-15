@@ -1,12 +1,9 @@
 import 'package:flutter/widgets.dart';
+import 'package:surface_duo/src/models.dart';
 import 'package:surface_duo/src/platform_handler.dart';
 
 class SurfaceDuoInfo extends StatefulWidget {
-  final Widget Function(
-    bool isDualScreenDevice,
-    bool isSpanned,
-    double hingeAngle,
-  ) builder;
+  final Widget Function(SurfaceDuoInfoModel info) builder;
 
   const SurfaceDuoInfo({
     @required this.builder,
@@ -19,19 +16,15 @@ class SurfaceDuoInfo extends StatefulWidget {
 
 class _SurfaceDuoInfoState extends State<SurfaceDuoInfo>
     with WidgetsBindingObserver {
-  bool isDualScreenDevice;
-  bool isSpanned;
-  double hingeAngle;
+  SurfaceDuoInfoModel info;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    var info =
-        PageStorage.of(context).readState(context) as _SurfaceDuoInfoCache;
-    isDualScreenDevice = info?.isDualScreenDevice;
-    isSpanned = info?.isSpanned;
-    hingeAngle = info?.hingeAngle;
+    info =
+        (PageStorage.of(context).readState(context) as SurfaceDuoInfoModel) ??
+            SurfaceDuoInfoModel.unknown();
     getData();
   }
 
@@ -42,27 +35,15 @@ class _SurfaceDuoInfoState extends State<SurfaceDuoInfo>
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(isDualScreenDevice, isSpanned, hingeAngle);
+    return widget.builder(info);
   }
 
   Future getData() async {
-    isDualScreenDevice ??= await SurfaceDuo.getIsDual();
-
-    final _isSpanned = await SurfaceDuo.getIsSpanned();
-    final _hingeAngle = await SurfaceDuo.getHingeAngle();
-
     if (mounted) {
-      PageStorage.of(context).writeState(
-        context,
-        _SurfaceDuoInfoCache(
-          isDualScreenDevice: isDualScreenDevice,
-          isSpanned: isSpanned,
-          hingeAngle: hingeAngle,
-        ),
-      );
+      var _info = await SurfaceDuo.getInfoModel();
+      PageStorage.of(context).writeState(context, _info);
       setState(() {
-        isSpanned = _isSpanned;
-        hingeAngle = _hingeAngle;
+        info = _info;
       });
     }
   }
@@ -72,16 +53,4 @@ class _SurfaceDuoInfoState extends State<SurfaceDuoInfo>
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-}
-
-class _SurfaceDuoInfoCache {
-  final bool isDualScreenDevice;
-  final bool isSpanned;
-  final double hingeAngle;
-
-  _SurfaceDuoInfoCache({
-    this.isDualScreenDevice,
-    this.isSpanned,
-    this.hingeAngle,
-  });
 }

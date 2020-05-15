@@ -1,3 +1,5 @@
+import 'package:flutter/painting.dart';
+
 class NonFunctionalBounds {
   final double top;
   final double bottom;
@@ -25,4 +27,40 @@ class NonFunctionalBounds {
         "right": right,
         "top": top,
       };
+}
+
+class SurfaceDuoInfoModel {
+  final bool isDualScreenDevice;
+  final bool isSpanned;
+  final double hingeAngle;
+  final NonFunctionalBounds nonFunctionalBounds;
+
+  double get seemThickness =>
+      (nonFunctionalBounds?.right ?? 0) - (nonFunctionalBounds?.left ?? 0);
+
+  SurfaceDuoInfoModel({
+    this.isDualScreenDevice,
+    this.isSpanned,
+    this.hingeAngle,
+    this.nonFunctionalBounds,
+  });
+
+  factory SurfaceDuoInfoModel.unknown() => SurfaceDuoInfoModel(
+        isDualScreenDevice: false,
+        isSpanned: false,
+        hingeAngle: 0,
+        nonFunctionalBounds: null,
+      );
+
+  factory SurfaceDuoInfoModel.fromJson(Map<String, dynamic> json) =>
+      SurfaceDuoInfoModel(
+        isDualScreenDevice: json["isDualScreenDevice"],
+        isSpanned: json["isSpanned"],
+        hingeAngle: json["hingeAngle"],
+        nonFunctionalBounds: json["nonFunctionalBounds"] != null
+            ? NonFunctionalBounds.fromJson(
+                json["nonFunctionalBounds"],
+              )
+            : null,
+      );
 }

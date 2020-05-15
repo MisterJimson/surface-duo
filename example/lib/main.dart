@@ -21,14 +21,20 @@ class MyApp extends StatelessWidget {
       ),
       body: Center(
         child: SurfaceDuoInfo(
-          builder: (isDualScreenDevice, isSpanned, hingeAngle) {
+          builder: (info) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Text('This page always displays!'),
-                Text('isDualScreenDevice: $isDualScreenDevice'),
-                Text('isAppSpanned: $isSpanned'),
-                Text('hingeAngle: $hingeAngle'),
+                Text('isDualScreenDevice: ${info.isDualScreenDevice}'),
+                Text('isAppSpanned: ${info.isSpanned}'),
+                Text('hingeAngle: ${info.hingeAngle}'),
+                RaisedButton(
+                  child: Text('Test'),
+                  onPressed: () {
+                    SurfaceDuo.getInfoModel();
+                  },
+                ),
               ],
             );
           },

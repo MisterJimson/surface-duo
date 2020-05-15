@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:surface_duo/src/constants.dart';
+import 'package:surface_duo/src/ui/surface_duo_info.dart';
 
 /// Currently supports Two Page layout
 ///
@@ -13,25 +13,23 @@ class SurfaceDuoLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    var isDuoSpannedSize = size == spannedSize;
-
-    if (!isDuoSpannedSize) {
-      return child;
-    }
-
-    return Row(
-      children: <Widget>[
-        SizedBox.fromSize(
-          size: unspannedSize,
-          child: child,
-        ),
-        const SizedBox(width: centerBarWidth),
-        SizedBox.fromSize(
-          size: unspannedSize,
-          child: secondChild,
-        ),
-      ],
+    return SurfaceDuoInfo(
+      builder: (info) {
+        if (!info.isSpanned) {
+          return child;
+        }
+        return Row(
+          children: <Widget>[
+            Expanded(
+              child: child,
+            ),
+            SizedBox(width: info.seemThickness),
+            Expanded(
+              child: secondChild,
+            ),
+          ],
+        );
+      },
     );
   }
 }

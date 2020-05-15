@@ -83,6 +83,17 @@ class SurfaceDuoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                         val json = Gson().toJson(nonFunctionalBounds)
                         result.success(json)
                     }
+                } else if (call.method == "getInfoModel") {
+                    if (!mSensorsSetup) {
+                        setupSensors()
+                    }
+                    val infoModel = getInfoModel();
+                    if (infoModel == null) {
+                        result.success(null)
+                    } else {
+                        val json = Gson().toJson(infoModel)
+                        result.success(json)
+                    }
                 } else if (call.method == "getHingeAngle") {
                     if (!mSensorsSetup) {
                         setupSensors()
@@ -191,6 +202,57 @@ class SurfaceDuoPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
         mSensorsSetup = true
     }
+
+    fun getInfoModel() : SurfaceDuoInfoModel? {
+        if (activity == null) return null;
+
+        val feature = "com.microsoft.device.display.displaymask"
+        val pm = activity!!.packageManager
+        val isDualScreenDevice = pm.hasSystemFeature(feature)
+
+        val displayMask = DisplayMask.fromResourcesRectApproximation(activity)
+        val boundings = displayMask.boundingRects
+
+        var isSpanned = false;
+        var nonFunctionalBounds: NonFunctionalBounds? = null
+
+        if (boundings.isNotEmpty()) {
+            val first = boundings[0]
+            val rootView = activity!!.window.decorView.rootView
+            val drawingRect = android.graphics.Rect()
+            rootView.getDrawingRect(drawingRect)
+            isSpanned = first.intersect(drawingRect)
+
+            val density: Float = activity!!.resources.displayMetrics.density
+
+            if (isSpanned) {
+                nonFunctionalBounds = NonFunctionalBounds(
+                        top = first.top / density,
+                        bottom = first.bottom / density,
+                        left = first.left / density,
+                        right = first.right / density)
+            }
+        }
+
+        return SurfaceDuoInfoModel(
+                isDualScreenDevice = isDualScreenDevice,
+                isSpanned = isSpanned,
+                hingeAngle = mCurrentHingeAngle,
+                nonFunctionalBounds = nonFunctionalBounds)
+    }
+
 }
 
-data class NonFunctionalBounds(val top: Float, val bottom: Float, val left: Float, val right: Float)
+data class NonFunctionalBounds(
+        val top: Float,
+        val bottom: Float,
+        val left: Float,
+        val right: Float
+)
+
+data class SurfaceDuoInfoModel(
+        val isDualScreenDevice: Boolean,
+        val isSpanned: Boolean,
+        val hingeAngle: Float,
+        val nonFunctionalBounds: NonFunctionalBounds?
+)
