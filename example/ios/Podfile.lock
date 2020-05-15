@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - surface_duo (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - surface_duo (from `.symlinks/plugins/surface_duo/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  surface_duo:
+    :path: ".symlinks/plugins/surface_duo/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  surface_duo: 244df248d48220b7bfd2130d2ca174bccb3540cb
+
+PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
+
+COCOAPODS: 1.9.1
