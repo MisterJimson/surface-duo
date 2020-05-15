@@ -25,12 +25,12 @@ class _SurfaceDuoInfoState extends State<SurfaceDuoInfo>
     info =
         (PageStorage.of(context).readState(context) as SurfaceDuoInfoModel) ??
             SurfaceDuoInfoModel.unknown();
-    getData();
+    updateInfo();
   }
 
   @override
   void didChangeMetrics() {
-    getData();
+    updateInfo();
   }
 
   @override
@@ -38,7 +38,7 @@ class _SurfaceDuoInfoState extends State<SurfaceDuoInfo>
     return widget.builder(info);
   }
 
-  Future getData() async {
+  Future updateInfo() async {
     if (mounted) {
       var _info = await SurfaceDuo.getInfoModel();
       PageStorage.of(context).writeState(context, _info);

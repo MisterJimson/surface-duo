@@ -1,5 +1,3 @@
-import 'package:flutter/painting.dart';
-
 class NonFunctionalBounds {
   final double top;
   final double bottom;
